@@ -17,6 +17,7 @@ SweeperWindow::SweeperWindow() : wxFrame(nullptr, wxID_ANY, "Minesweeper", wxPoi
 		for (int y = 0; y < nSweepHeight; y++) {
 			sweeps[y * nSweepWidth + x] = new wxButton(this, 10000 + (y * nSweepWidth + x));
 			sweeps[y * nSweepWidth + x]->SetFont(font);
+			
 			grid->Add(sweeps[y * nSweepWidth + x], 1, wxEXPAND | wxALL);
 
 			sweeps[y * nSweepWidth + x]->Bind(wxEVT_COMMAND_BUTTON_CLICKED, &SweeperWindow::OnButtonClicked, this);
@@ -50,6 +51,7 @@ void SweeperWindow::OnButtonClicked(wxCommandEvent& evt) {
 
 	sweeps[y * nSweepWidth + x]->Enable(false);
 	if (nMineField[y * nSweepWidth + x] == -1) {
+		sweeps[y * nSweepWidth + x]->SetOwnBackgroundColour(*wxRED);
 		wxMessageBox("Well, nice try. Guess you lost :( Good luck next time!");
 		FirstClicked = true;
 
@@ -59,6 +61,7 @@ void SweeperWindow::OnButtonClicked(wxCommandEvent& evt) {
 				
 				sweeps[y * nSweepWidth + x]->SetLabel("");
 				sweeps[y * nSweepWidth + x]->Enable(true);
+				sweeps[y * nSweepWidth + x]->SetBackgroundColour(wxNullColour);
 			}
 		}
 	}
@@ -78,6 +81,18 @@ void SweeperWindow::OnButtonClicked(wxCommandEvent& evt) {
 			}
 		}
 		if (neighborMines > 0) {
+			if (neighborMines == 1) {
+				sweeps[y * nSweepWidth + x]->SetOwnBackgroundColour(*wxGREEN);
+			}
+			else if (neighborMines == 2) {
+				sweeps[y * nSweepWidth + x]->SetOwnBackgroundColour(*wxCYAN);
+			}
+			else if (neighborMines == 3) {
+				sweeps[y * nSweepWidth + x]->SetOwnBackgroundColour(*wxBLUE);
+			}
+			else if (neighborMines == 4) {
+				sweeps[y * nSweepWidth + x]->SetOwnBackgroundColour(*wxYELLOW);
+			}
 			sweeps[y * nSweepWidth + x]->SetLabel(std::to_string(neighborMines));
 		}
 	}
